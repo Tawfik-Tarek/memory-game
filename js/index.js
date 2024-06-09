@@ -5,14 +5,16 @@ const modal = document.querySelector(".modal");
 const closeModal = document.querySelector(".modal .close");
 const modalInput = document.querySelector(".modal input");
 const playButton = document.querySelector(".modal .play-button");
+const Time = document.querySelector(".info-container .time span");
 let duration = 800;
+let time = 0;
 
 playButton.addEventListener("click", () => {
   const username = modalInput.value;
   if (username.trim() !== "") {
-    document.querySelector(".info-container span").innerHTML =
-      username;
+    document.querySelector(".info-container span").innerHTML = username;
     modal.remove();
+    firstShowAndTimer();
   } else {
     alert("Please enter your name or click on close button");
   }
@@ -20,6 +22,7 @@ playButton.addEventListener("click", () => {
 
 closeModal.addEventListener("click", () => {
   modal.remove();
+  firstShowAndTimer();
 });
 
 allBlocks.forEach((block) => {
@@ -53,3 +56,26 @@ allBlocks.forEach((block) => {
     }
   });
 });
+
+const firstShowAndTimer = () => {
+  setTimeout(() => {
+    allBlocks.forEach((block) => block.classList.remove("active"));
+    const timer = setInterval(() => {
+      time++;
+      Time.innerHTML = time;
+
+      const doneBlocks = document.querySelectorAll(".game .game-block.done");
+      if (doneBlocks.length === 16) {
+        clearInterval(timer);
+          alert("Congratulations! You won the game.");
+          location.reload();
+      }
+
+      if (time === 60) {
+        clearInterval(timer);
+          alert("Time is up! You lost the game.");
+          location.reload();
+      }
+    }, 1000);
+  }, 1500);
+};
